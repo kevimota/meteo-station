@@ -73,5 +73,5 @@ The POST body is a JSON with the following body:
 {"name": str("board_name"), "temp": float(T in °C), "pres": float(P in mbar), "humi": float(RH in %)}
 ```
 
-it will be sent regularly within a delay time (default=30s), to the registered URLs (up to 5), with no URL is registered, it will only fetch the sensor data and print to serial, but no POST request will be sent.
+it will be sent regularly within a delay time (default=30s), to the registered URLs (up to 5), if no URL is registered, it will only fetch the sensor data and print to serial, but no POST request will be sent. Register the URLs using the command `config_url`
 
