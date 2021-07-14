@@ -28,15 +28,15 @@ After connecting the esp32 usb port to the PC, make sure you can access it via s
 First erase the flash using:
 
 ```
-esptool.py --port /dev/tty.SLAB_USBtoUART --baud 921600 erase_flash
+esptool.py --port "port" --baud 921600 erase_flash
 ```
 
-changing the `/dev/tty.SLAB_USBtoUART` to the one you are using.
+changing the "port" to the one you are using.
 
 The binaries are at the bin folder, open the file `flash.sh` and change the serial port `/dev/cu.SLAB_USBtoUART` to the one you are using, then:
 
 ```
-sh flash.sh
+sh flash.sh "port"
 ```
 
 The firmware will be flash into the board.
