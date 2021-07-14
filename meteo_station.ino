@@ -265,8 +265,8 @@ void erase_flash() {
 void loop() {
   // send data after delay_time passed
   if ((millis() - last_time) > delay_time) {
-    send_data();
     last_time = millis();
+    send_data();
   }
 
   // configuration options
