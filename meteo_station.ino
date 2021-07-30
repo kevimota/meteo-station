@@ -11,6 +11,9 @@ Preferences preferences;
 #include <Adafruit_BME280.h>
 Adafruit_BME280 bme;
 
+#include <esp_task_wdt.h>
+#define WDT_TIMEOUT 120
+
 #define LED_BUILDTIN 2
 
 // Configuration values of the board
@@ -117,21 +120,34 @@ void setup() {
     Serial.println("BME280 sensor found!");
   }
   else {
-    Serial.println("Could not find a valid BME280 sensor, check wiring!");
-    while (1);
+    Serial.println("Could not find a valid BME280 sensor, check wiring! Resetting in 5 s...");
+    unsigned long time_now = millis();
+    while (millis() - time_now < 5000) {}
+    ESP.restart();
   }
 
   Serial.println("Setup finished!");
+  esp_task_wdt_init(WDT_TIMEOUT, true);
+  esp_task_wdt_add(NULL);
   
 }
 
 void send_data() {
   // send the data to registered urls
 
+  esp_task_wdt_reset();
+  
   // save the sensor values.
   float temp = bme.readTemperature();
   float pres = bme.readPressure() / 100.0F;
   float humi = bme.readHumidity();
+
+  if (temp < -100.0) {
+    Serial.println("Problem in the sensor, check connections. Resetting in 5 s...");
+    unsigned long time_now = millis();
+    while (millis() - time_now < 5000) {}
+    ESP.restart();
+  }
 
   // format json string
   String json = "{\"name\": \"" + board_name + "\", \"temp\": " + (String)temp + ", \"pres\": " + (String)pres + ", \"humi\": " + (String)humi + "}";
